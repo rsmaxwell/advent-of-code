@@ -24,10 +24,10 @@ public class Part {
 				System.out.println(String.format("result = %d", result));
 
 				total += result;
-
-				System.out.println("");
-				System.out.println(String.format("total = %d", total));
 			}
+
+			System.out.println("");
+			System.out.println(String.format("total = %d", total));
 
 		} catch (AppException e) {
 			System.err.println(e.getMessage());

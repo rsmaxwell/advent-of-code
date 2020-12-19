@@ -87,11 +87,6 @@ public class Expression {
 					value = eval();
 					next = State.START;
 
-				} else if (ch == ')') {
-					debug(" --> close-bracket");
-					end_of_file = true;
-					next = State.QUIT;
-
 				} else if (ch == (char) -1) {
 					debug(" --> end-of-file");
 					next = State.QUIT;
@@ -110,19 +105,21 @@ public class Expression {
 				break;
 
 			case GET_NEXT:
-				index++;
-				if (end_of_file || (index >= line.length())) {
+
+				if (end_of_file || (index + 1 >= line.length())) {
 					ch = (char) -1;
-					next = stateStack.pop();
 				} else {
+					index++;
 					ch = line.charAt(index);
-					next = stateStack.pop();
 				}
 
 				if (ch == ')') {
 					end_of_file = true;
 					ch = (char) -1;
 				}
+
+				next = stateStack.pop();
+
 				break;
 
 			case ADD:
@@ -150,6 +147,6 @@ public class Expression {
 	}
 
 	private void debug(String string) {
-		// System.out.println(string);
+		System.out.println(string);
 	}
 }
