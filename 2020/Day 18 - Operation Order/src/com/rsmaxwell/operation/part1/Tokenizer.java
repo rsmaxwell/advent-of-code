@@ -1,66 +1,69 @@
-package com.rsmaxwell.operation;
+package com.rsmaxwell.operation.part1;
 
-import com.rsmaxwell.operation.stack.ListStack;
-import com.rsmaxwell.operation.stack.Stack;
+import com.rsmaxwell.operation.part1.stack.ListStack;
+import com.rsmaxwell.operation.part1.stack.Stack;
+import com.rsmaxwell.operation.part1.token.Addition;
+import com.rsmaxwell.operation.part1.token.CloseBracket;
+import com.rsmaxwell.operation.part1.token.Multiplication;
+import com.rsmaxwell.operation.part1.token.NumberToken;
+import com.rsmaxwell.operation.part1.token.OpenBracket;
+import com.rsmaxwell.operation.part1.token.Token;
 
-public class Expression {
+public class Tokenizer {
 
 	private String line;
 	private int index;
+	private Token lookahead;
 
 	private enum State {
-		START, QUIT, PARSE, NUMBER, GET_NEXT, ADD, MULTIPLY
+		START, QUIT, PARSE, NUMBER, GET_NEXT
 	};
 
-	public Expression(String line) {
+	public void load(String line) {
 		this.line = line;
-	}
-
-	public long evaluate() throws Exception {
 		index = -1;
-		return eval();
 	}
 
-	private long eval() throws Exception {
+	public Token peek() throws Exception {
+		if (lookahead == null) {
+			lookahead = next();
+		}
+		return lookahead;
+	}
+
+	public void advance() throws Exception {
+		lookahead = null;
+	}
+
+	private Token next() throws Exception {
 
 		debug("----------------------------------------------------------------------------");
 
-		Stack<Long> valueStack = new ListStack<>();
-		Stack<State> operationStack = new ListStack<>();
 		Stack<State> stateStack = new ListStack<>();
-
 		State next = State.START;
 		State state;
-
+		Token token = null;
 		boolean end_of_file = false;
 		StringBuffer sb = new StringBuffer();
-		long value = 0;
 		char ch = 0;
 
 		while (next != State.QUIT) {
 			state = next;
 
 			debug("");
-			debug(String.format("%s %s", state, stateStack));
-			debug(String.format("%d %s", value, valueStack));
-			debug(String.format("operationStack: %s", operationStack));
-			debug(String.format("index:%d, ch:%c", index, ch));
+			debug(String.format("stack: %s %s", state, stateStack));
+			debug(String.format("index: %d, ch:%c", index, ch));
 
 			switch (state) {
 			case START:
-				if (operationStack.isEmpty()) {
-					stateStack.push(State.PARSE);
-					next = State.GET_NEXT;
-				} else {
-					next = operationStack.pop();
-				}
+				stateStack.push(State.PARSE);
+				next = State.GET_NEXT;
 				break;
 
 			case PARSE:
 				if (Character.isDigit(ch)) {
 					debug(" --> digit");
 					sb.setLength(0);
-					stateStack.push(State.START);
 					next = State.NUMBER;
 
 				} else if (Character.isWhitespace(ch)) {
@@ -70,22 +73,23 @@ public class Expression {
 
 				} else if (ch == '+') {
 					debug(" --> plus");
-					valueStack.push(value);
-					operationStack.push(State.ADD);
-					stateStack.push(State.PARSE);
-					next = State.GET_NEXT;
+					token = new Addition();
+					next = State.QUIT;
 
 				} else if (ch == '*') {
 					debug(" --> multiply");
-					valueStack.push(value);
-					operationStack.push(State.MULTIPLY);
-					stateStack.push(State.PARSE);
-					next = State.GET_NEXT;
+					token = new Multiplication();
+					next = State.QUIT;
 
 				} else if (ch == '(') {
 					debug(" --> open-bracket");
-					value = eval();
-					next = State.START;
+					token = new OpenBracket();
+					next = State.QUIT;
+
+				} else if (ch == '(') {
+					debug(" --> close-bracket");
+					token = new CloseBracket();
+					next = State.QUIT;
 
 				} else if (ch == (char) -1) {
 					debug(" --> end-of-file");
@@ -99,8 +103,9 @@ public class Expression {
 					stateStack.push(State.NUMBER);
 					next = State.GET_NEXT;
 				} else {
-					value = Integer.parseInt(sb.toString());
-					next = stateStack.pop();
+					int value = Integer.parseInt(sb.toString());
+					token = new NumberToken(value);
+					next = State.QUIT;
 				}
 				break;
 
@@ -122,23 +127,13 @@ public class Expression {
 
 				break;
 
-			case ADD:
-				value = value + valueStack.pop();
-				next = State.START;
-				break;
-
-			case MULTIPLY:
-				value = value * valueStack.pop();
-				next = State.START;
-				break;
-
 			default:
 				throw new Exception("Unexpected state: " + state);
 			}
 		}
 
 		debug("----------------------------------------------------------------------------");
-		return value;
+		return token;
 	}
 
 	@Override
@@ -147,6 +142,6 @@ public class Expression {
 	}
 
 	private void debug(String string) {
-		System.out.println(string);
+		// System.out.println(string);
 	}
 }

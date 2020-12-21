@@ -1,4 +1,4 @@
-package com.rsmaxwell.operation.stack;
+package com.rsmaxwell.operation.part1.stack;
 
 public interface Stack<T> {
 

@@ -1,4 +1,4 @@
-package com.rsmaxwell.operation;
+package com.rsmaxwell.operation.part1;
 
 public class AppException extends Exception {
 

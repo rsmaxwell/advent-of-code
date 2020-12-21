@@ -1,4 +1,4 @@
-package com.rsmaxwell.operation.stack;
+package com.rsmaxwell.operation.part1.stack.copy;
 
 import java.util.ArrayList;
 import java.util.List;

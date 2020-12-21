@@ -1,10 +1,8 @@
-package com.rsmaxwell.operation;
+package com.rsmaxwell.operation.part1;
 
 import java.util.List;
 
-// 3885397323131 wrong: too high
-
-public class Part {
+public class Part1 {
 
 	public static void main(String[] args) throws Exception {
 
@@ -15,7 +13,7 @@ public class Part {
 			List<String> lines = Utils.readData(args);
 			for (String line : lines) {
 
-				Expression expression = new Expression(line);
+				Expression1 expression = new Expression1(line);
 
 				System.out.println("");
 				System.out.println(expression);
