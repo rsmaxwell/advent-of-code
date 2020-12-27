@@ -28,7 +28,7 @@ public class Part2 {
 			List<Expr> expressions = parser.parse();
 
 			for (Expr expression : expressions) {
-				// A stPrinter astPrinter = new AstPrinter();
+				// AstPrinter astPrinter = new AstPrinter();
 				// String string = astPrinter.print(expression);
 				// System.out.println(string);
 
