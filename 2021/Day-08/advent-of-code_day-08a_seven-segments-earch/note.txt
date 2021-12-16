@@ -1,7 +1,0 @@
-// xform := []int{bits.A, bits.B, bits.C, bits.D, bits.E, bits.F, bits.G}
-// for _, e := range entries {
-// 	for _, d := range e.OutputDigits {
-// 		x := d.Transform(xform)
-// 		fmt.Println(x.String())
-// 	}
-// }
