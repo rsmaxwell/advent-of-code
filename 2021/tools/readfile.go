@@ -12,7 +12,7 @@ func ReadLines(filename string) ([]string, error) {
 
 	file, err := os.Open(filename)
 	if err != nil {
-		fmt.Printf("failed to open %s", filename)
+		fmt.Printf("failed to open %s\n", filename)
 		return nil, err
 	}
 	defer file.Close()
@@ -84,6 +84,25 @@ func ReadBinaryNumbers(filename string) ([]int, error) {
 			return nil, err
 		}
 		numbers = append(numbers, int(number))
+	}
+
+	return numbers, nil
+}
+
+func ReadCommaSeparatedNumbers(filename string) ([]int, error) {
+
+	lines, err := ReadLines(filename)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(lines) != 1 {
+		return nil, fmt.Errorf("unexpected data")
+	}
+
+	numbers, err := CommaSeparatedValuesToNumbers(lines[0])
+	if err != nil {
+		return nil, err
 	}
 
 	return numbers, nil

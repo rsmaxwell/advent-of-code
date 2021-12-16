@@ -25,6 +25,22 @@ func Max(v1 int, vn ...int) int {
 	return m
 }
 
+func MinArray(numbers []int) int {
+	minimum := numbers[0]
+	for _, number := range numbers {
+		minimum = Min(minimum, number)
+	}
+	return minimum
+}
+
+func MaxArray(numbers []int) int {
+	maximum := numbers[0]
+	for _, number := range numbers {
+		maximum = Max(maximum, number)
+	}
+	return maximum
+}
+
 func CommaSeparatedValuesToNumbers(line string) ([]int, error) {
 
 	numbers := []int{}
@@ -61,4 +77,12 @@ func Abs(x int) int {
 		return -x
 	}
 	return x
+}
+
+func SumOfLinearSequence(n int, a int, b int) int {
+	return n * (a + b) / 2
+}
+
+func CheckNumberPowerOfTwo(n int) int {
+	return n & (n - 1)
 }
