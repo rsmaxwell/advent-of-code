@@ -37,10 +37,11 @@ func ReadCave(filename string) (*Cave, error) {
 		return nil, err
 	}
 
-	width, err := tools.GetLinesWidth(lines)
-	if err != nil {
-		return nil, err
+	minimum, maximum := tools.GetLinesWidth(lines)
+	if minimum != maximum {
+		return nil, fmt.Errorf("width varies between %d and %d", minimum, maximum)
 	}
+	width := minimum
 	length := len(lines)
 
 	cavemap := make(map[string]*Location)

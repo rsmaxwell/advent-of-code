@@ -47,7 +47,7 @@ func ReadNumbers(filename string) ([]int, error) {
 	return numbers, nil
 }
 
-func GetLinesWidth(lines []string) (int, error) {
+func GetLinesWidth(lines []string) (int, int) {
 
 	minimum := math.MaxInt
 	maximum := math.MinInt
@@ -58,6 +58,17 @@ func GetLinesWidth(lines []string) (int, error) {
 		maximum = Max(maximum, width)
 	}
 
+	return minimum, maximum
+}
+
+func GetReportConstantWidth(filename string) (int, error) {
+
+	lines, err := ReadLines(filename)
+	if err != nil {
+		return 0, err
+	}
+
+	minimum, maximum := GetLinesWidth(lines)
 	if minimum != maximum {
 		return 0, fmt.Errorf("width varies between %d and %d", minimum, maximum)
 	}
@@ -65,14 +76,15 @@ func GetLinesWidth(lines []string) (int, error) {
 	return minimum, nil
 }
 
-func GetReportWidth(filename string) (int, error) {
+func GetReportWidth(filename string) (int, int, error) {
 
 	lines, err := ReadLines(filename)
 	if err != nil {
-		return 0, err
+		return 0, 0, err
 	}
 
-	return GetLinesWidth(lines)
+	minimum, maximum := GetLinesWidth(lines)
+	return minimum, maximum, nil
 }
 
 func ReadBinaryNumbers(filename string) ([]int, error) {

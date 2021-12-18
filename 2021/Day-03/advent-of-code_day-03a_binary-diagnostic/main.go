@@ -13,7 +13,7 @@ func main() {
 	filename := "data.txt"
 	// filename := "example.txt"
 
-	width, err := tools.GetReportWidth(filename)
+	width, err := tools.GetReportConstantWidth(filename)
 	if err != nil {
 		fmt.Println(err.Error())
 		os.Exit(1)
