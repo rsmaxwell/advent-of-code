@@ -1,6 +1,7 @@
 package tools
 
 import (
+	"bytes"
 	"strconv"
 	"strings"
 )
@@ -85,4 +86,22 @@ func SumOfLinearSequence(n int, a int, b int) int {
 
 func CheckNumberPowerOfTwo(n int) int {
 	return n & (n - 1)
+}
+
+func Pad(length int) string {
+	buf := bytes.Buffer{}
+	for i := 0; i < length; i++ {
+		buf.WriteString(" ")
+	}
+	return buf.String()
+}
+
+func Contains(s []string, str string) bool {
+	for _, v := range s {
+		if v == str {
+			return true
+		}
+	}
+
+	return false
 }

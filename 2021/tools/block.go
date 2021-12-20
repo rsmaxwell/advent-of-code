@@ -45,11 +45,16 @@ func (b *Block) Append(line string) {
 
 func (b *Block) ToNumbers() ([]int, error) {
 
-	if len(b.Lines) != 1 {
-		err := fmt.Errorf("unexpected data")
-		return nil, err
+	numbers := []int{}
+
+	for _, line := range b.Lines {
+		array, err := CommaSeparatedValuesToNumbers(line)
+		if err != nil {
+			return nil, err
+		}
+
+		numbers = append(numbers, array...)
 	}
 
-	line := b.Lines[0]
-	return CommaSeparatedValuesToNumbers(line)
+	return numbers, nil
 }
